@@ -1,0 +1,35 @@
+---
+- hosts: all
+  sudo: true
+  tasks:
+
+    # install update cache
+    - name: update apt cache
+      apt: update_cache=yes
+
+    # install packages
+    - apt: name=build-essential state=present
+    - apt: name=g++ state=present
+    - apt: name=flex state=present
+    - apt: name=bison state=present
+    - apt: name=gperf state=present
+    - apt: name=ruby state=present
+    - apt: name=perl state=present
+    - apt: name=libsqlite3-dev state=present
+    - apt: name=libfontconfig1-dev state=present
+    - apt: name=libicu-dev state=present
+    - apt: name=libfreetype6 state=present
+    - apt: name=libssl-dev state=present
+    - apt: name=libpng-dev state=present
+    - apt: name=libjpeg-dev state=present
+    - apt: name=python state=present
+    - apt: name=libx11-dev state=present
+    - apt: name=libxext-dev state=present
+    #- apt: name=ttf-mscorefonts-installer state=present
+
+    # checkout and compile phantomjs
+    - apt: name=git state=present
+    - git: repo=git://github.com/ariya/phantomjs.git dest=/home/vagrant/phantomjs recursive=yes version=2.0.0 accept_hostkey=true
+    - command: build.sh
+      args:
+        chdir: /home/vagrant/phantomjs
