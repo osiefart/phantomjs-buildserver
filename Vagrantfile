@@ -10,15 +10,14 @@ Vagrant.configure(2) do |config|
   config.vm.box = "debian/jessie64"
 
   config.vm.network "private_network", ip: "192.168.50.5"
-  config.vm.synced_folder ".", "/app", type: "nfs"
 
   config.vm.provider "virtualbox" do |v|
-    v.memory = 2048
-    v.cpus = 1
+    v.memory = 4096
+    v.cpus = 3
   end
 
   config.vm.provision :ansible do |ansible|
-    ansible.verbose = "v"
+    ansible.verbose = "vvv"
     ansible.playbook = "playbook.yml"
   end
 
