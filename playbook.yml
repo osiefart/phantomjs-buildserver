@@ -28,17 +28,12 @@
         - python
         - libx11-dev
         - libxext-dev
+        - git
 
     # checkout and compile phantomjs
-    - name: Install git and expect
-      apt: pkg={{item}} state=installed
-      with_items:
-        - git
-        - expect
-
     - git: repo=https://github.com/ariya/phantomjs.git dest=/home/vagrant/phantomjs_2.0.0 recursive=yes version=2.0.0 accept_hostkey=true
     - command: rm -f /home/vagrant/phantomjs_2.0.0/bin/phantomjs
-    - shell: yes | sudo ./build.sh chdir=/home/vagrant/phantomjs_2.0.0
+    - shell: echo "y" | sudo ./build.sh chdir=/home/vagrant/phantomjs_2.0.0
       async: 3600
       poll: 0
       register: phantomjs_build
