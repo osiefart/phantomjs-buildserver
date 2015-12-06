@@ -30,11 +30,19 @@
         - libxext-dev
 
     # checkout and compile phantomjs
-    - apt: name=git state=present
+    - name: Install git and expect
+      apt: pkg={{item}} state=installed
+      with_items:
+        - git
+        - expect
+
     - git: repo=https://github.com/ariya/phantomjs.git dest=/home/vagrant/phantomjs_2.0.0 recursive=yes version=2.0.0 accept_hostkey=true
-    - command:  yes '' | ./build.sh
+    - command: rm -f /home/vagrant/phantomjs_2.0.0/bin/phantomjs
+    - shell: yes | sudo ./build.sh chdir=/home/vagrant/phantomjs_2.0.0
       async: 3600
       poll: 0
-      args:
-        chdir: /home/vagrant/phantomjs_2.0.0
-    - wait_for: path=/home/vagrant/phantomjs_2.0.0/bin/phantomjs delay=1800 timeout=3600
+      register: phantomjs_build
+    - wait_for: path=/home/vagrant/phantomjs_2.0.0/bin/phantomjs delay=10 timeout=3600
+    - command: rm -rf /vagrant/build
+    - file: path=/vagrant/build state=directory mode=0755
+    - command: mv /home/vagrant/phantomjs_2.0.0/bin/phantomjs /vagrant/build/phantomjs
